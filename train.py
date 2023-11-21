@@ -186,11 +186,11 @@ def main():
 
         return files_dict
 
-    train_files = make_dict(train_ids)
-    val_files = make_dict(val_ids)
+    train_files = make_dict(train_ids)[:4]
+    val_files = make_dict(val_ids)[:4]
     test_files = make_dict(test_ids)
 
-    max_epochs = 600
+    max_epochs = 2
     image_size = [128]
     batch_size = 2
     val_interval = 2
@@ -337,10 +337,8 @@ def main():
                 batch_data["image"].to(device),
                 batch_data["label"].to(device),
             )
-            print(labels.shape)
             optimizer.zero_grad()
             outputs = model(inputs)
-            print(outputs.shape)
             loss = loss_function(outputs, labels)
             loss.backward()
             epoch_loss += loss.item()
