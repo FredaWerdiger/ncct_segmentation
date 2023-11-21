@@ -204,7 +204,7 @@ def main():
                     align_corners=[True, None],
                     spatial_size=image_size * 3),
             NormalizeIntensityd(keys=["image"], nonzero=True, channel_wise=True),
-            # RandAffined(keys=['image', 'label'], prob=0.5, rotate_range=(0, [-1, 1], [-1, 1], [-1, 1])),
+            RandAffined(keys=['image', 'label'], prob=0.5, rotate_range=(0, [-1, 1], [-1, 1], [-1, 1])),
             RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=0),
             RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=1),
             RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=2),
@@ -276,6 +276,12 @@ def main():
     import random
     # m = random.randint(0, len(train_files))
     # s = random.randint(100, 200)
+    for im in train_dataset:
+        if not im['image'].shape[0] == 1:
+            print(im)
+    for im in val_dataset:
+        if not im['image'].shape[0] == 1:
+            print(im)
     data_example = train_dataset[0]
     ch_in = data_example['image'].shape[0]
     # s = random.randint(5, data_example['image'].shape[2] -1)
