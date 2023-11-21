@@ -190,7 +190,7 @@ def main():
     val_files = make_dict(val_ids)[:2]
     test_files = make_dict(test_ids)[:2]
 
-    max_epochs = 600
+    max_epochs = 2
     image_size = [128]
     batch_size = 2
     val_interval = 2
