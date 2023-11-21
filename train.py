@@ -186,9 +186,9 @@ def main():
 
         return files_dict
 
-    train_files = make_dict(train_ids)[:10]
-    val_files = make_dict(val_ids)[:10]
-    test_files = make_dict(test_ids)[:10]
+    train_files = make_dict(train_ids)[:100]
+    val_files = make_dict(val_ids)[:50]
+    test_files = make_dict(test_ids)[:50]
 
     max_epochs = 4
     image_size = [128]
