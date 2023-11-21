@@ -204,7 +204,7 @@ def main():
                     align_corners=[True, None],
                     spatial_size=image_size * 3),
             NormalizeIntensityd(keys=["image"], nonzero=True, channel_wise=True),
-            RandAffined(keys=['image', 'label'], prob=0.5, rotate_range=(0, [-1, 1], [-1, 1], [-1, 1])),
+            # RandAffined(keys=['image', 'label'], prob=0.5, rotate_range=(0, [-1, 1], [-1, 1], [-1, 1])),
             RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=0),
             RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=1),
             RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=2),
