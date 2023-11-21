@@ -190,7 +190,7 @@ def main():
     val_files = make_dict(val_ids)
     test_files = make_dict(test_ids)
 
-    max_epochs = 4
+    max_epochs = 600
     image_size = [128]
     batch_size = 2
     val_interval = 2
@@ -276,12 +276,6 @@ def main():
     import random
     # m = random.randint(0, len(train_files))
     # s = random.randint(100, 200)
-    for im in train_dataset:
-        if not im['image'].shape[0] == 1:
-            print(im)
-    for im in val_dataset:
-        if not im['image'].shape[0] == 1:
-            print(im)
     data_example = train_dataset[0]
     ch_in = data_example['image'].shape[0]
     # s = random.randint(5, data_example['image'].shape[2] -1)
