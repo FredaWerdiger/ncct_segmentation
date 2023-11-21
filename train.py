@@ -144,8 +144,8 @@ def main():
     HOMEDIR = os.path.expanduser('~/')
     if os.path.exists(HOMEDIR + 'mediaflux/'):
         directory = HOMEDIR + 'mediaflux/data_freda/ncct_segmentation/'
-    elif os.path.exists('Z:/data_freda'):
-        directory = 'Z:/data_freda/ncct_segmentation/'
+    elif os.path.exists('X:/data_freda'):
+        directory = 'X:/data_freda/ncct_segmentation/'
     elif os.path.exists('/data/gpfs/projects/punim1086/ctp_project'):
         directory = '/data/gpfs/projects/punim1086/ncct_segmentation/'
 
@@ -180,18 +180,15 @@ def main():
                   if 'INSP_' + os.path.basename(file).split('.nii.gz')[0].split('_')[1] in id]
         paths2 = [file for file in mask_paths
                   if 'INSP_' + os.path.basename(file).split('.nii.gz')[0].split('_')[1] in id]
-        if paths2:
-            files_dict = [{"image": image_name, "label": label_name} for
-                          image_name, label_name in zip(paths1, paths2)]
-        else:
-            files_dict = [{"image": image_name} for
-                          image_name in paths1]
+
+        files_dict = [{"image": image_name, "label": label_name} for
+                      image_name, label_name in zip(paths1, paths2)]
 
         return files_dict
 
-    train_files = make_dict(train_ids)
-    val_files = make_dict(val_ids)
-    test_files = make_dict(test_ids)
+    train_files = make_dict(train_ids)[:2]
+    val_files = make_dict(val_ids)[:2]
+    test_files = make_dict(test_ids)[:2]
 
     max_epochs = 600
     image_size = [128]
@@ -275,12 +272,13 @@ def main():
                              batch_size=1,
                              pin_memory=True)
 
-    # s = 150
-    # import random
+    s = 150
+    import random
     # m = random.randint(0, len(train_files))
     # s = random.randint(100, 200)
     data_example = train_dataset[0]
     ch_in = data_example['image'].shape[0]
+    # s = random.randint(5, data_example['image'].shape[2] -1)
     # plt.figure("sanity check")
     # plt.subplot(1, 2, 1)
     # plt.title(f"image")
@@ -316,7 +314,7 @@ def main():
                      weight_decay=1e-5)
 
     dice_metric = DiceMetric(include_background=False, reduction='mean')
-    lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max_epochs)
+    # lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max_epochs)
     epoch_loss_values = []
     dice_metric_values = []
     best_metric = -1
@@ -326,13 +324,13 @@ def main():
     post_label = Compose([EnsureType(), AsDiscrete(to_onehot=2)])
     start = time.time()
     model_path = 'best_metric_' + model._get_name() + '_' + str(max_epochs) + '.pth'
+    model.train()
 
     for epoch in range(max_epochs):
         print("-" * 10)
         print(f"epoch {epoch + 1}/{max_epochs}")
         epoch_loss = 0
         step = 0
-        model.train()
         for batch_data in train_loader:
             step += 1
             inputs, labels = (
@@ -347,7 +345,7 @@ def main():
             loss.backward()
             epoch_loss += loss.item()
             optimizer.step()
-        lr_scheduler.step()
+        # lr_scheduler.step()
         epoch_loss /= step
         epoch_loss_values.append(epoch_loss)
         print(f"epoch {epoch + 1} average loss: {epoch_loss:.4f}")
