@@ -201,7 +201,7 @@ def main(path_to_images, model_path):
             test_data["pred"] = model(test_inputs)
 
             test_data = [post_transforms(i) for i in decollate_batch(test_data)]
-            test_output, test_label, test_image = from_engine(["pred", "image"])(test_data)
+            test_output, test_image = from_engine(["pred", "image"])(test_data)
 
             original_image = loader(test_data[0]["image_meta_dict"]["filename_or_obj"])
             original_image = original_image[0]  # image data
