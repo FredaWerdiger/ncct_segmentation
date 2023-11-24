@@ -188,6 +188,7 @@ def main(path_to_images, model_path):
         dropout=0.2,
         num_res_units=2,
         norm=Norm.BATCH).to(device)
+    # TODO: testing out channels as 1?
 
     model.load_state_dict(torch.load(model_path))
 
