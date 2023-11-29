@@ -124,7 +124,10 @@ def create_image(ct_img,
 
 def main(path_to_images, model_path):
 
-    files = [{"image": image_name} for image_name in glob.glob(os.path.join(path_to_images, '*_ncct.nii.gz'))]
+    files = [{"image": image_name} for image_name in glob.glob(os.path.join(path_to_images, '*'))]
+    out_path = os.path.join(path_to_images, 'prediction')
+    if not os.path.exists(out_path):
+        os.makedirs(out_path)
 
     image_size = [128]
 
@@ -174,7 +177,7 @@ def main(path_to_images, model_path):
         SaveImaged(
             keys="pred",
             meta_keys="pred_meta_dict",
-            output_dir=path_to_images,
+            output_dir=out_path,
             output_postfix="pred",
             resample=False,
             separate_folder=False)
@@ -211,7 +214,7 @@ def main(path_to_images, model_path):
             original_image = original_image[0]  # image data
             prediction = test_output[0][1].detach().numpy()
             subject = test_data[0]["image_meta_dict"]["filename_or_obj"].split('.nii.gz')[0]
-            save_loc = os.path.join(path_to_images, subject + '_pred.png')
+            save_loc = os.path.join(out_path, subject + '_pred.png')
 
             create_image(original_image, prediction, save_loc,
                          define_zvalues(original_image), ext='png', save=True)
