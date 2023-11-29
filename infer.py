@@ -19,6 +19,7 @@ from monai.transforms import (
     EnsureTyped,
     Resized,
     SaveImaged,
+    SplitDimd
 )
 
 import torch
@@ -168,6 +169,8 @@ def main(path_to_images, model_path):
             to_tensor=True,
         ),
         AsDiscreted(keys="pred", argmax=True, to_onehot=2),
+        SplitDimd(keys="pred", dim=0, keepdim=False,
+                  output_postfixes=['inverted', 'pred']),
         SaveImaged(
             keys="pred",
             meta_keys="pred_meta_dict",
