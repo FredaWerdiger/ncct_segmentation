@@ -124,7 +124,7 @@ def create_image(ct_img,
 
 def main(path_to_images, model_path):
 
-    files = [{"image": image_name} for image_name in glob.glob(os.path.join(path_to_images, '*'))]
+    files = [{"image": image_name} for image_name in glob.glob(os.path.join(path_to_images, '*.nii.gz'))]
     out_path = os.path.join(path_to_images, 'prediction')
     if not os.path.exists(out_path):
         os.makedirs(out_path)
