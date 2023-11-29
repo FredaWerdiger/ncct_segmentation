@@ -172,10 +172,10 @@ def main(path_to_images, model_path):
             to_tensor=True,
         ),
         AsDiscreted(keys="pred", argmax=True, to_onehot=2),
-        SplitDimd(keys="pred", dim=0, keepdim=False,
-                  output_postfixes=['inverted', 'pred']),
+        SplitDimd(keys="pred", dim=0, keepdim=True,
+                  output_postfixes=['inverted', 'good']),
         SaveImaged(
-            keys="pred",
+            keys="pred_good",
             meta_keys="pred_meta_dict",
             output_dir=out_path,
             output_postfix="pred",
